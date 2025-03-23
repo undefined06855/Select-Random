@@ -12,6 +12,10 @@
 	"developer": "undefined0",
 	"description": "Select a random amount of objects from your selection!",
 
+	"links": {
+		"source": "https://github.com/undefined06855/Select-Random"
+	},
+
 	"resources": {
 		"spritesheets": {
 			"tabSheet": [ "resources/icon.png" ]

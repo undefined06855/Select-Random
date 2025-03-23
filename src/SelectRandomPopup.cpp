@@ -161,6 +161,12 @@ cocos2d::CCArray* SelectRandomPopup::actualSelectedObjects() {
     cocos2d::CCArray* results = cocos2d::CCArray::create();
 
     for (auto obj : geode::cocos::CCArrayExt<GameObject*>(objs)) {
+        if (obj->m_linkedGroup == -1) {
+            // not a linked object
+            results->addObject(obj);
+            continue;
+        }
+
         if (std::find(linkedGroupsSeen.begin(), linkedGroupsSeen.end(), obj->m_linkedGroup) != linkedGroupsSeen.end()) {
             // already seen
             continue;

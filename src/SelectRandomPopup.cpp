@@ -55,8 +55,7 @@ bool SelectRandomPopup::setup() {
 
         m_checkbox = CCMenuItemToggler::createWithStandardSprites(this, menu_selector(SelectRandomPopup::onCheckbox), .75f);
         m_checkbox->setID("checkbox");
-        // have to call four times to be consistent, ccmenuitemtoggler actually sucks major balls
-        // there is CERTAINLY a better way to do this
+        // ccmenuitemtoggler actually sucks major balls
         if (geode::Mod::get()->getSavedValue<bool>("last-checkbox", true)) m_checkbox->toggle(true);
         checkboxMenu->addChild(m_checkbox);
 

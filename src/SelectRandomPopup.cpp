@@ -214,5 +214,3 @@ void SelectRandomPopup::onButton(cocos2d::CCObject* sender) {
     editorUI->updateButtons();
     editorUI->updateObjectInfoLabel();
 }
-
-// TODO: treat linked objects as one

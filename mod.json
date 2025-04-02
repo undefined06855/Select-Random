@@ -3,14 +3,15 @@
 	"gd": {
 		"win": "2.2074",
 		"android": "2.2074",
-		"mac": "2.2074"
+		"mac": "2.2074",
+		"ios": "2.2074"
 	},
 
 	"id": "undefined0.select_random",
 	"name": "Select Random",
-	"version": "v1.0.0",
+	"version": "v1.0.1",
 	"developer": "undefined0",
-	"description": "Select a random amount of objects from your selection!",
+	"description": "Select some random objects from your selection!",
 
 	"links": {
 		"source": "https://github.com/undefined06855/Select-Random"

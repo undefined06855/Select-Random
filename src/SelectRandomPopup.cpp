@@ -124,6 +124,7 @@ void SelectRandomPopup::onChanceInput(std::string str) {
         }
 
         m_percentage = asFloat / total;
+        m_chanceInput->setPlaceholder(std::to_string((int)std::floor(.5f * total)));
     } else {
         if (asFloat > 100) {
             asFloat = 100;
@@ -132,6 +133,7 @@ void SelectRandomPopup::onChanceInput(std::string str) {
         }
 
         m_percentage = asFloat / 100.f;
+        m_chanceInput->setPlaceholder("50");
     }
 
     geode::Mod::get()->setSavedValue<std::string>("last-percentage", str);

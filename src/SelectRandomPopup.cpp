@@ -113,6 +113,7 @@ void SelectRandomPopup::onChanceInput(std::string str) {
     int total = actualSelectedObjects()->count();
 
     float asFloat = std::atof(str.c_str());
+    std::string placeholder = "";
     // there was error checking here so if you input an invalid number itd get
     // reset but that was kind of too inhibiting since you couldnt start typing
     // a decimal number etc
@@ -124,7 +125,7 @@ void SelectRandomPopup::onChanceInput(std::string str) {
         }
 
         m_percentage = asFloat / total;
-        m_chanceInput->setPlaceholder(std::to_string((int)std::floor(.5f * total)));
+        placeholder = std::to_string((int)std::floor(.5f * total));
     } else {
         if (asFloat > 100) {
             asFloat = 100;
@@ -133,8 +134,11 @@ void SelectRandomPopup::onChanceInput(std::string str) {
         }
 
         m_percentage = asFloat / 100.f;
-        m_chanceInput->setPlaceholder("50");
+        placeholder = "50";
     }
+
+    // broken: doesnt update until you enter + clear the text input
+    m_chanceInput->setPlaceholder(placeholder);
 
     geode::Mod::get()->setSavedValue<std::string>("last-percentage", str);
 

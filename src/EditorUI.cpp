@@ -8,7 +8,7 @@ void HookedEditorUI::createMoveMenu() {
         "icon.png"_spr,
         menu_selector(HookedEditorUI::onButton),
         nullptr,
-        1.f
+        .9f
     );
     btn->setID("editor-button"_spr);
 

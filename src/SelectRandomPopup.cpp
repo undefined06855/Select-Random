@@ -30,14 +30,11 @@ bool SelectRandomPopup::setup() {
     m_infoLabel->setID("info-label");
     m_mainLayer->addChildAtPosition(m_infoLabel, geode::Anchor::Center, { 0.f, 25.f });
 
-    auto percentageLabel = cocos2d::CCLabelBMFont::create("%", "bigFont.fnt");
-    percentageLabel->setID("percentage-label");
-    percentageLabel->setScale(.7f);
-
-    auto percentageBasedBtn = geode::BasedButtonSprite::create(percentageLabel, geode::BaseType::Editor, (int)geode::EditorBaseSize::Normal, (int)geode::EditorBaseColor::Green);
+    auto percentageBasedBtn = geode::BasedButtonSprite::create(cocos2d::CCLabelBMFont::create("%", "bigFont.fnt"), geode::BaseType::Editor, (int)geode::EditorBaseSize::Normal, (int)geode::EditorBaseColor::Green);
     auto emptyBasedBtn = geode::BasedButtonSprite::create(nullptr, geode::BaseType::Editor, (int)geode::EditorBaseSize::Normal, (int)geode::EditorBaseColor::Green);
 
     percentageBasedBtn->setScale(.8f);
+    percentageBasedBtn->setTopRelativeScale(1.2f);
     emptyBasedBtn->setScale(.8f);
 
     m_percentageToggler = CCMenuItemToggler::create(

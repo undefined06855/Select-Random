@@ -12,6 +12,7 @@
 	"version": "v1.0.3",
 	"developer": "undefined0",
 	"description": "Select some random objects from your selection!",
+	"tags": [ "editor", "utility" ],
 
 	"links": {
 		"source": "https://github.com/undefined06855/Select-Random"

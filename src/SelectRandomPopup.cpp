@@ -1,4 +1,6 @@
 #include "SelectRandomPopup.hpp"
+#include "Geode/cocos/cocoa/CCObject.h"
+#include "Geode/ui/BasedButtonSprite.hpp"
 
 SelectRandomPopup* SelectRandomPopup::create() {
     auto ret = new SelectRandomPopup;
@@ -19,7 +21,7 @@ bool SelectRandomPopup::setup() {
 
     m_chanceInput = geode::TextInput::create(70.f, "50", "bigFont.fnt");
     m_chanceInput->setID("percentage-input");
-    m_chanceInput->setFilter("0123456789");
+    m_chanceInput->setFilter("0123456789.");
     m_chanceInput->setString(geode::Mod::get()->getSavedValue<std::string>("last-percentage", "50"), true);
     m_chanceInput->setCallback([this](const std::string& str){ onChanceInput(str); });
     m_mainLayer->addChildAtPosition(m_chanceInput, geode::Anchor::Center, { 0.f, 54.f });
@@ -30,8 +32,22 @@ bool SelectRandomPopup::setup() {
 
     auto percentageLabel = cocos2d::CCLabelBMFont::create("%", "bigFont.fnt");
     percentageLabel->setID("percentage-label");
-    percentageLabel->setScale(.6f);
-    m_mainLayer->addChildAtPosition(percentageLabel, geode::Anchor::Center, { 47.f, 54.f });
+    percentageLabel->setScale(.7f);
+
+    auto percentageBasedBtn = geode::BasedButtonSprite::create(percentageLabel, geode::BaseType::Editor, (int)geode::EditorBaseSize::Normal, (int)geode::EditorBaseColor::Green);
+    auto emptyBasedBtn = geode::BasedButtonSprite::create(nullptr, geode::BaseType::Editor, (int)geode::EditorBaseSize::Normal, (int)geode::EditorBaseColor::Green);
+
+    percentageBasedBtn->setScale(.8f);
+    emptyBasedBtn->setScale(.8f);
+
+    m_percentageToggler = CCMenuItemToggler::create(
+        percentageBasedBtn, emptyBasedBtn,
+        this, menu_selector(SelectRandomPopup::onPercentage)
+    );
+    m_percentageToggler->setID("percentage-toggler");
+    m_percentageToggler->setPosition({ 172.f, 169.5f });
+    if (geode::Mod::get()->getSavedValue<bool>("last-treat-percentage-as-value", false)) m_percentageToggler->toggle(true);
+    m_buttonMenu->addChild(m_percentageToggler);
 
     auto buttonSprite = ButtonSprite::create("Select!");
     buttonSprite->setScale(.9f);
@@ -56,7 +72,7 @@ bool SelectRandomPopup::setup() {
         m_checkbox = CCMenuItemToggler::createWithStandardSprites(this, menu_selector(SelectRandomPopup::onCheckbox), .75f);
         m_checkbox->setID("checkbox");
         // ccmenuitemtoggler actually sucks major balls
-        if (geode::Mod::get()->getSavedValue<bool>("last-checkbox", true)) m_checkbox->toggle(true);
+        if (geode::Mod::get()->getSavedValue<bool>("last-treat-linked-objs-as-one", true)) m_checkbox->toggle(true);
         checkboxMenu->addChild(m_checkbox);
 
         auto checkboxLabel = cocos2d::CCLabelBMFont::create("Treat linked objects as one", "bigFont.fnt");
@@ -83,6 +99,7 @@ bool SelectRandomPopup::setup() {
     // update stuffs like members and labels
     onSeedInput(m_seedInput->getString()); // sets m_seed
     onCheckbox(nullptr);
+    onPercentage(nullptr);
 
     return true;
 }
@@ -93,12 +110,20 @@ void SelectRandomPopup::onChanceInput(std::string str) {
         return;
     }
 
+    int total = actualSelectedObjects()->count();
+
     float asFloat = std::atof(str.c_str());
-    if (asFloat == 0) {
-        // invalid perhaps
-        m_percentage = 0.f;
-        m_chanceInput->setString("0");
-        str = "0";
+    // there was error checking here so if you input an invalid number itd get
+    // reset but that was kind of too inhibiting since you couldnt start typing
+    // a decimal number etc
+    if (m_treatPercentageAsExactValue) {
+        if (asFloat > total) {
+            asFloat = total;
+            m_chanceInput->setString(std::to_string(total));
+            str = std::to_string(total);
+        }
+
+        m_percentage = asFloat / total;
     } else {
         if (asFloat > 100) {
             asFloat = 100;
@@ -111,10 +136,15 @@ void SelectRandomPopup::onChanceInput(std::string str) {
 
     geode::Mod::get()->setSavedValue<std::string>("last-percentage", str);
 
-    int percentage = m_percentage * 100.f;
-    int total = actualSelectedObjects()->count();
-    int result = total * m_percentage;
-    m_infoLabel->setString(fmt::format("{}% x {} objects -> {} selected objects", percentage, total, result).c_str());
+    int result;
+    if (m_treatPercentageAsExactValue) {
+        result = std::floor(asFloat);
+        m_infoLabel->setString(fmt::format("{} selected objects (out of {})", result, total).c_str());
+    } else {
+        result = total * m_percentage;
+        m_infoLabel->setString(fmt::format("{}% x {} objects -> {} selected objects", asFloat, total, result).c_str());
+    }
+
     m_infoLabel->limitLabelWidth(180.f, 0.85f, 0.2f);
 
     if (result == 0) {
@@ -144,8 +174,16 @@ void SelectRandomPopup::onSeedInput(std::string str) {
 void SelectRandomPopup::onCheckbox(cocos2d::CCObject* sender) {
     if (sender) m_treatLinkedObjectsAsOne = !m_checkbox->isOn(); // being called from callback, reverse
     else m_treatLinkedObjectsAsOne = m_checkbox->isOn(); // being called from init
-    geode::Mod::get()->setSavedValue<bool>("last-checkbox", m_treatLinkedObjectsAsOne);
+    geode::Mod::get()->setSavedValue<bool>("last-treat-linked-objs-as-one", m_treatLinkedObjectsAsOne);
     onChanceInput(m_chanceInput->getString()); // update label n shit
+}
+
+// see above for comments
+void SelectRandomPopup::onPercentage(cocos2d::CCObject* selector) {
+    if (selector) m_treatPercentageAsExactValue = !m_percentageToggler->isOn();
+    else m_treatPercentageAsExactValue = m_percentageToggler->isOn();
+    geode::Mod::get()->setSavedValue<bool>("last-treat-percentage-as-value", m_treatPercentageAsExactValue);
+    onChanceInput(m_chanceInput->getString());
 }
 
 cocos2d::CCArray* SelectRandomPopup::actualSelectedObjects() {
@@ -160,7 +198,7 @@ cocos2d::CCArray* SelectRandomPopup::actualSelectedObjects() {
     cocos2d::CCArray* results = cocos2d::CCArray::create();
 
     for (auto obj : geode::cocos::CCArrayExt<GameObject*>(objs)) {
-        if (obj->m_linkedGroup == -1) {
+        if (obj->m_linkedGroup <= 0) {
             // not a linked object
             results->addObject(obj);
             continue;

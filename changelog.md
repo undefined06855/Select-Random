@@ -1,4 +1,6 @@
 # Select Random
+## v1.0.3
+- Add option to input static value instead of percentage
 ## v1.0.2
 - Fix crashes on iOS
 ## v1.0.1

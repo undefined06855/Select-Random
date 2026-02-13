@@ -1,11 +1,11 @@
 #pragma once
 #include <Geode/ui/Popup.hpp>
 
-class SelectRandomPopup : public geode::Popup<> {
+class SelectRandomPopup : public geode::Popup {
 public:
     static SelectRandomPopup* create();
-    bool setup();
-    
+    bool init();
+
     cocos2d::CCLabelBMFont* m_infoLabel;
 
     CCMenuItemToggler* m_checkbox;
@@ -21,8 +21,8 @@ public:
     CCMenuItemSpriteExtra* m_selectButton;
 
     void onButton(cocos2d::CCObject* selector);
-    void onChanceInput(std::string str);
-    void onSeedInput(std::string str);
+    void onChanceInput(geode::ZStringView str);
+    void onSeedInput(geode::ZStringView str);
     void onCheckbox(cocos2d::CCObject* selector);
     void onPercentage(cocos2d::CCObject* selector);
 

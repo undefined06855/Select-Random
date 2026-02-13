@@ -4,7 +4,7 @@
 
 SelectRandomPopup* SelectRandomPopup::create() {
     auto ret = new SelectRandomPopup;
-    if (ret->initAnchored(240.f, 230.f)) {
+    if (ret->init()) {
         ret->autorelease();
         return ret;
     }
@@ -13,7 +13,9 @@ SelectRandomPopup* SelectRandomPopup::create() {
     return nullptr;
 }
 
-bool SelectRandomPopup::setup() {
+bool SelectRandomPopup::init() {
+    if (!Popup::init(240.f, 230.f)) return false;
+
     setTitle("Select Random");
     setID("select-random-popup"_spr);
 
@@ -101,7 +103,7 @@ bool SelectRandomPopup::setup() {
     return true;
 }
 
-void SelectRandomPopup::onChanceInput(std::string str) {
+void SelectRandomPopup::onChanceInput(geode::ZStringView str) {
     if (str == "") {
         m_percentage = .5f;
         return;
@@ -109,7 +111,7 @@ void SelectRandomPopup::onChanceInput(std::string str) {
 
     int total = actualSelectedObjects()->count();
 
-    float asFloat = std::atof(str.c_str());
+    float asFloat = geode::utils::numFromString<float>(str.c_str()).unwrapOr(.5f);
     std::string placeholder = "";
     // there was error checking here so if you input an invalid number itd get
     // reset but that was kind of too inhibiting since you couldnt start typing
@@ -159,19 +161,21 @@ void SelectRandomPopup::onChanceInput(std::string str) {
     }
 }
 
-void SelectRandomPopup::onSeedInput(std::string str) {
+void SelectRandomPopup::onSeedInput(geode::ZStringView str) {
     if (str == "") {
         m_seed = 0;
         return;
     }
 
-    if (str.length() > 5) {
+    std::string truncated = str;
+
+    if (truncated.length() > 5) {
         // stupid textbox length bypass people
-        str = str.substr(0, 5);
+        truncated = truncated.substr(0, 5);
     }
 
-    geode::Mod::get()->setSavedValue<std::string>("last-seed", str);
-    m_seed = std::stoi(str);
+    geode::Mod::get()->setSavedValue<std::string>("last-seed", truncated);
+    m_seed = geode::utils::numFromString<int>(truncated).unwrapOr(0);
 }
 
 void SelectRandomPopup::onCheckbox(cocos2d::CCObject* sender) {

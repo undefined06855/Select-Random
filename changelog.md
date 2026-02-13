@@ -1,4 +1,6 @@
 # Select Random
+## v1.0.5
+- Geode v5 and GD 2.2081 support!
 ## v1.0.4
 - Adjust scales for buttons
 - Add mod previews

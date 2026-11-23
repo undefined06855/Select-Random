@@ -1,5 +1,5 @@
 {
-    "geode": "6.0.0-beta.1",
+    "geode": "6.0.0-beta.2",
     "gd": {
         "win": "2.2091",
         "android": "2.2091",
@@ -22,5 +22,9 @@
         "spritesheets": {
             "tabSheet": [ "resources/icon.png" ]
         }
+    },
+
+    "dependencies": {
+        "alphalaneous.editortab_api": "v3.0.0-beta.3"
     }
 }

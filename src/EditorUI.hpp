@@ -2,6 +2,6 @@
 #include <Geode/modify/EditorUI.hpp>
 
 class $modify(HookedEditorUI, EditorUI) {
-	void createMoveMenu();
+	bool init(LevelEditorLayer* editor);
     void onButton(CCObject* sender);
 };

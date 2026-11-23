@@ -1,26 +1,26 @@
 {
-	"geode": "6.0.0-beta.1",
-	"gd": {
-		"win": "2.2091",
-		"android": "2.2091",
-		"mac": "2.2091",
-		"ios": "2.2091"
-	},
+    "geode": "6.0.0-beta.1",
+    "gd": {
+        "win": "2.2091",
+        "android": "2.2091",
+        "mac": "2.2091",
+        "ios": "2.2091"
+    },
 
-	"id": "undefined0.select_random",
-	"name": "Select Random",
-	"version": "v1.1.0",
-	"developer": "undefined0",
-	"description": "Select some random objects from your selection!",
-	"tags": [ "editor", "utility" ],
+    "id": "undefined0.select_random",
+    "name": "Select Random",
+    "version": "v1.1.0",
+    "developer": "undefined0",
+    "description": "Select some random objects from your selection!",
+    "tags": [ "editor", "utility" ],
 
-	"links": {
-		"source": "https://github.com/undefined06855/Select-Random"
-	},
+    "links": {
+        "source": "https://github.com/undefined06855/Select-Random"
+    },
 
-	"resources": {
-		"spritesheets": {
-			"tabSheet": [ "resources/icon.png" ]
-		}
-	}
+    "resources": {
+        "spritesheets": {
+            "tabSheet": [ "resources/icon.png" ]
+        }
+    }
 }

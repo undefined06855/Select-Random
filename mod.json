@@ -1,5 +1,5 @@
 {
-    "geode": "6.0.0-beta.2",
+    "geode": "6.0.0",
     "gd": {
         "win": "2.2091",
         "android": "2.2091",
@@ -9,7 +9,7 @@
 
     "id": "undefined0.select_random",
     "name": "Select Random",
-    "version": "v1.1.0",
+    "version": "v1.1.1",
     "developer": "undefined0",
     "description": "Select some random objects from your selection!",
     "tags": [ "editor", "utility" ],
